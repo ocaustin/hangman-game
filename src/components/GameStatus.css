@@ -1,0 +1,50 @@
+/* src/components/GameStatus.css */
+
+/* Common styles for game status messages */
+.game-status {
+    font-size: 20px; /* Adjust font size as needed */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px auto; /* Center the container horizontally */
+    background-color: gray; /* Background color */
+    color: #ffffff; /* Default text color for better readability */
+    max-width: 400px; /* Maximum width of the container */
+    width: 100%; /* Ensure it scales down on smaller screens */
+  }
+
+/* Styling for the lost state */
+.game-status.lost {
+  background-color: #ff4d4d; /* Light red background for loss */
+  border: 2px solid #d43f3a; /* Darker red border */
+}
+
+/* Styling for the won state */
+.game-status.won {
+  background-color: #4caf50; /* Green background for win */
+  border: 2px solid #388e3c; /* Darker green border */
+}
+
+/* Styling for the ongoing state */
+.game-status.ongoing {
+  background-color: #2196f3; /* Blue background for ongoing */
+  border: 2px solid #1976d2; /* Darker blue border */
+}
+
+/* Styling specifically for ongoing message background */
+.ongoing-message {
+  background-color: #ffffff; /* White background for the ongoing message */
+  color: #000000; /* Black text color for better contrast */
+  border-radius: 5px; /* Slightly rounded corners */
+  padding: 10px;
+  display: inline-block; /* Ensure it wraps around the text */
+  max-width: 400px; /* Maximum width of the container */
+  width: 100%; /* Ensure it scales down on smaller screens */
+}
+
+/* Full word styling when game is lost */
+.full-word {
+  font-size: 24px; /* Larger font size for the full word */
+  font-weight: bold;
+  margin-top: 10px;
+}
