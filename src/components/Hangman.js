@@ -3,7 +3,7 @@ import HangmanImage from "./HangmanImage";
 import WordDisplay from "./WordDisplay";
 import Keyboard from "./Keyboard";
 import GameStatus from "./GameStatus";
-import Help from "./Help";
+import Help from "./Help"; // Import the updated Help component
 import words from "../words"; // Import the words list
 import "../App.css"; // Import the CSS file for styling
 
@@ -25,7 +25,7 @@ const Hangman = () => {
   const [guessedLetters, setGuessedLetters] = useState([]); // Letters the user has guessed
   const [wrongGuesses, setWrongGuesses] = useState(0); // Number of incorrect guesses
   const [gameStatus, setGameStatus] = useState("not_started"); // 'not_started', 'playing', 'won', 'lost'
-  const [showHelp, setShowHelp] = useState(false); // Show or hide the help section
+  const [showHelp, setShowHelp] = useState(false); // Show or hide the help modal
   const [hintLetter, setHintLetter] = useState(""); // Letter to provide as a hint
   const [showWelcome, setShowWelcome] = useState(true); // Show welcome button
   const [backgroundImage, setBackgroundImage] = useState(backgroundImages[0]); // Default background image
@@ -70,18 +70,13 @@ const Hangman = () => {
           if (wrongGuesses + 1 >= 11) {
             setGameStatus("lost"); // User has made too many wrong guesses
           }
-          // No need to increment wrongGuesses state here
         }
 
         return newGuessedLetters;
       });
 
-      // Directly update wrong guesses only if it's a wrong guess
       if (isWrongGuess) {
-        // Using setWrongGuesses with a functional update to ensure correct value
-        setWrongGuesses((prevWrongGuesses) => {
-          return prevWrongGuesses + 1; // Increment the wrong guesses count
-        });
+        setWrongGuesses((prevWrongGuesses) => prevWrongGuesses + 1);
       }
     }
   };
@@ -95,48 +90,38 @@ const Hangman = () => {
       const randomHint =
         unguessedLetters[Math.floor(Math.random() * unguessedLetters.length)];
       setHintLetter(randomHint);
-      // Automatically guess the hint letter and immediately check for win/loss
       handleGuess(randomHint);
     }
   };
 
   // Reset the game to start a new one
   const resetGame = () => {
-    fetchRandomWord(); // Fetch a new word
-    setGuessedLetters([]); // Clear guessed letters
-    setWrongGuesses(0); // Reset wrong guesses
-    setGameStatus("playing"); // Set game status to 'playing'
-    setHintLetter(""); // Clear hint letter
-    // Change background image randomly when the game resets
+    fetchRandomWord();
+    setGuessedLetters([]);
+    setWrongGuesses(0);
+    setGameStatus("playing");
+    setHintLetter("");
     const randomImage =
       backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
     setBackgroundImage(randomImage);
   };
 
-  // Show or hide the help section
-  const toggleHelp = () => {
-    setShowHelp(!showHelp);
-  };
+  // Show or hide the help modal
+  const toggleHelp = () => setShowHelp(!showHelp);
 
-  // Handle start button click to begin the game
   const startGame = () => {
-    setShowWelcome(false); // Hide the welcome screen
-    resetGame(); // Start a new game
+    setShowWelcome(false);
+    resetGame();
   };
 
-  // Update displayed word including hint
   const displayedWord = word
     .split("")
     .map((letter) => (guessedLetters.includes(letter) ? letter : "_"))
     .join(" ");
 
-  // Check for win/loss conditions
   useEffect(() => {
-    if (gameStatus === "playing") {
-      const revealedWord = displayedWord.replace(/ /g, "");
-      if (revealedWord === word) {
-        setGameStatus("won"); // User has guessed the word
-      }
+    if (gameStatus === "playing" && displayedWord.replace(/ /g, "") === word) {
+      setGameStatus("won");
     }
   }, [displayedWord]);
 
@@ -167,16 +152,20 @@ const Hangman = () => {
             gameStatus={gameStatus}
           />
           <GameStatus gameStatus={gameStatus} word={word} />
-          <button className="restart-button" onClick={resetGame}>
-            Restart Game
-          </button>
-          <button className="hint-button" onClick={provideHint}>
-            Hint
-          </button>
-          <button className="help-button" onClick={toggleHelp}>
-            Help
-          </button>
-          <Help showHelp={showHelp} />
+          {/* Container for buttons */}
+          <div className="button-container">
+            <button className="restart-button" onClick={resetGame}>
+              Restart Game
+            </button>
+            <button className="hint-button" onClick={provideHint}>
+              Hint
+            </button>
+            <button className="help-button" onClick={toggleHelp}>
+              Help
+            </button>
+          </div>
+          <Help showHelp={showHelp} toggleHelp={toggleHelp} />{" "}
+          {/* Modal Integration */}
         </>
       )}
     </div>
